@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assistente Médico de Alto Padrão</title>
+    <!-- Google Fonts for a luxurious and modern look -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Color palette and design tokens */
+      :root {
+        --primary: #0e2959; /* deep navy */
+        --secondary: #d4a122; /* rich gold */
+        --background: #f5f7fa; /* very light gray-blue */
+        --text: #1a1a1a; /* near black */
+        --card-bg: #ffffff;
+        --card-border: #e5e7eb;
+        --input-border: #cbd5e1;
+        --input-focus: rgba(212, 161, 34, 0.4);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        color: var(--text);
+        background-color: var(--background);
+        line-height: 1.5;
+      }
+
+      /* Hero section with luxurious header background */
+      .hero {
+        background: url('luxury_header.png') center/cover no-repeat;
+        position: relative;
+        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+      }
+      .hero::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+      }
+      .hero-content {
+        position: relative;
+        z-index: 1;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 600;
+      }
+      .hero p {
+        margin-top: 0.5rem;
+        font-size: 1rem;
+        font-weight: 300;
+      }
+
+      /* Container for the main content */
+      .container {
+        max-width: 900px;
+        margin: -80px auto 2rem;
+        padding: 0 1rem;
+        position: relative;
+        z-index: 2;
+      }
+
+      /* Card styling for form sections */
+      .card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 12px;
+        padding: 2rem 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+      }
+      .card h2 {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        color: var(--primary);
+        font-weight: 500;
+        font-size: 1.4rem;
+      }
+
+      /* Form element styles */
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 0.6rem 0.8rem;
+        border: 1px solid var(--input-border);
+        border-radius: 6px;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      input:focus,
+      select:focus,
+      textarea:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px var(--input-focus);
+      }
+      textarea {
+        resize: vertical;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .col {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 0.8rem 1.6rem;
+        background: var(--secondary);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        cursor: pointer;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .button:hover {
+        background: #b5891c;
+      }
+
+      #result {
+        margin-top: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--card-border);
+        border-radius: 8px;
+        background: #fff;
+        white-space: pre-wrap;
+        min-height: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hero section at top -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Assistente Médico de Alto Padrão</h1>
+        <p>Automatize sua gestão clínica com integração n8n</p>
+      </div>
+    </section>
+
+    <main class="container">
+      <!-- Form for uploading records -->
+      <section class="card">
+        <h2>Enviar Dados</h2>
+        <form id="recordForm">
+          <div class="row">
+            <div class="col">
+              <label for="recordType">Tipo de Registro</label>
+              <select id="recordType" name="action" required>
+                <option value="upload_surgery">Cirurgia</option>
+                <option value="upload_payment">Pagamento</option>
+                <option value="upload_consultation">Consulta</option>
+                <option value="upload_other">Outro</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="date">Data</label>
+              <input type="date" id="date" name="date" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="patient">Paciente</label>
+              <input
+                type="text"
+                id="patient"
+                name="patient"
+                placeholder="Nome do paciente"
+              />
+            </div>
+            <div class="col">
+              <label for="procedure">Procedimento/Descrição</label>
+              <input
+                type="text"
+                id="procedure"
+                name="procedure"
+                placeholder="Procedimento ou descrição"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="clinic">Clínica/Hospital</label>
+              <input
+                type="text"
+                id="clinic"
+                name="clinic"
+                placeholder="Clínica, hospital ou convênio"
+              />
+            </div>
+            <div class="col">
+              <label for="value">Valor</label>
+              <input
+                type="number"
+                step="0.01"
+                id="value"
+                name="value"
+                placeholder="0,00"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="file">Arquivo (opcional)</label>
+              <input
+                type="file"
+                id="file"
+                name="file"
+                accept="image/*,application/pdf"
+              />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="notes">Observações</label>
+              <textarea
+                id="notes"
+                name="notes"
+                rows="4"
+                placeholder="Informações adicionais"
+              ></textarea>
+            </div>
+          </div>
+          <button type="submit" class="button">Enviar</button>
+        </form>
+      </section>
+
+      <!-- Form for querying financial summary -->
+      <section class="card">
+          <h2>Consultar Resumo Financeiro</h2>
+          <form id="queryForm">
+            <div class="row">
+              <div class="col">
+                <label for="queryMessage">Mensagem</label>
+                <input
+                  type="text"
+                  id="queryMessage"
+                  name="message"
+                  placeholder="Ex.: Qual é meu saldo?"
+                  required
+                />
+              </div>
+            </div>
+            <button type="submit" class="button">Consultar</button>
+          </form>
+          <div id="result"></div>
+      </section>
+    </main>
+
+    <script>
+      // Substitua pelo endpoint do seu webhook n8n
+      const endpoint = 'https://SEU-N8N-DOMINIO/webhook/assistente-leonardo';
+
+      // Helper: converte arquivo em base64
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result.split(',')[1]);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Envio de registros
+      document.getElementById('recordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const payload = {};
+
+        // Extrai valores dos campos simples
+        payload['action'] = form.recordType.value;
+        if (form.date.value) payload['date'] = form.date.value;
+        if (form.patient.value) payload['patient'] = form.patient.value;
+        if (form.procedure.value) payload['procedure'] = form.procedure.value;
+        if (form.clinic.value) payload['clinic'] = form.clinic.value;
+        if (form.value.value) payload['value'] = form.value.value;
+        if (form.notes.value) payload['notes'] = form.notes.value;
+
+        // Se houver arquivo, converte para base64 e adiciona
+        const fileInput = form.file;
+        if (fileInput && fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          try {
+            const base64 = await fileToBase64(file);
+            payload['file'] = base64;
+            payload['filename'] = file.name;
+            payload['filetype'] = file.type;
+          } catch (err) {
+            console.error('Erro ao ler arquivo:', err);
+          }
+        }
+
+        // Envia para n8n
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const data = await res.json();
+          alert('Dados enviados com sucesso!');
+        } catch (error) {
+          alert('Erro ao enviar dados.');
+          console.error(error);
+        }
+      });
+
+      // Consulta de resumo financeiro
+      document.getElementById('queryForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = document.getElementById('queryMessage').value;
+        if (!message) return;
+        const queryPayload = {
+          action: 'query_status',
+          message: message
+        };
+        const resultDiv = document.getElementById('result');
+        resultDiv.textContent = 'Consultando...';
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(queryPayload)
+          });
+          const data = await res.json();
+          // Exibe a resposta de forma legível
+          resultDiv.textContent = data.FinancialStatus || data.message || JSON.stringify(data, null, 2);
+        } catch (error) {
+          resultDiv.textContent = 'Erro ao consultar.';
+          console.error(error);
+        }
+      });
+    </script>
+  </body>
+</html>
